@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クラウドリストとは？</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #202020; /* 背景色 */
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            background-color: #333; /* ヘッダー背景色 */
+            position: relative;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: floatUp 1.5s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        main {
+            padding: 20px;
+        }
+        section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #333; /* セクション背景色 */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-in-out;
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1, h2 {
+            color: #007bff; /* 見出し色 */
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: #007bff; /* フッター背景色 */
+            color: white;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>クラウドリストとは？</h1>
+    </header>
+    <main>
+        <section>
+            <h2>クラウド変数とは？</h2>
+            <p>Scratchには「クラウド変数」という、インターネットを通じてデータを共有できる特別な変数があります。</p>
+	<p>このクラウド変数は、scratcherなら世界中の人々と共有してデータを動かすことができます。</p>
+        </section>
+
+        <section>
+            <h2>クラウドリストとは？</h2>
+            <p>クラウド変数にユーザー名を保存して、誰がこの作品を見たのかユーザー名でわかるリストです</p>
+        </section>
+
+<section>
+            <h2>クラウドリストの原理</h2>
+            <ol>
+                <li>ユーザー名を数値に変換。</li>
+                <li>数値化したユーザー名に改行の意味の00を付け足して連結。</li>
+                <li>連結した数値たちをクラウド変数に保存。</li>
+                <li>数値化したユーザー名を復元して元のユーザー名を表示。</li>
+            </ol>
+        </section>
+
+
+        <section>
+            <h2>メリット</h2>
+            <ol>
+                <li>誰がこの作品を見てくれたのかがユーザー名でわかる。</li>
+                <li>有名な人が作品を見てくれたことがわかる。</li>
+            </ol>
+        </section>
+<section>
+            <h2>デメリット</h2>
+            <ol>
+                <li>クラウド変数には限界があるから時々クラウド変数をリセットしなければならない。（保存するために）</li>
+                <li>作るのが難しい。</li>
+            </ol>
+        </section>
+<section>
+            <h2>作品</h2>
+            <ol>
+                <li><a href="https://scratch.mit.edu/projects/780866208/" target="_blank">クラウドリスト/a></li>
+            </ol>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 クラウドリスト</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sections = document.querySelectorAll("section");
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                    }
+                });
+            });
+
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+</body>
+</html>
