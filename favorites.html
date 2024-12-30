@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私のお気に入りの作品</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 10px;
+            background-color: #202020;
+            color: white;
+            display: flex;
+            position: relative;
+        }
+
+        /* サイドバー */
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            padding: 15px;
+            position: fixed;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transform: translateX(-100%); /* サイドバーが完全に隠れる */
+            transition: transform 0.3s ease; /* translateXを使ってアニメーション */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .sidebar.open {
+            transform: translateX(0); /* 開いたときに画面内に移動 */
+        }
+
+        .sidebar button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 関連リンクボタンの位置 */
+        .sidebar-toggle-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 8px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+        }
+
+        /* オーバーレイ */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* メインコンテンツ */
+        .content {
+            margin-left: 0;
+            width: 100%;
+            padding: 20px;
+            transition: margin-left 0.3s ease, margin-right 0.3s ease;
+        }
+
+        .title {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0 5px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .description {
+            font-size: 1.2em;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .projects {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .project, .favorite-project {
+            width: 100%;
+            max-width: 45%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .project, .favorite-project {
+                max-width: 90%;
+            }
+        }
+
+        .favorite-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 40px;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .project img, .favorite-project img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project img:hover, .favorite-project img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .project .title,
+        .favorite-project .title {
+            color: white;
+        }
+
+        /* 関連リンクのスタイル */
+        .related-links {
+            margin-top: 60px;
+            display: none; /* 初期状態で非表示 */
+        }
+
+        .related-links a {
+            color: white;
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            padding: 5px;
+            display: block;
+            background-color: #444;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .related-links a:hover {
+            background-color: #007bff;
+        }
+
+        /* 関連リンクの分かれ目 */
+        .divider {
+            height: 1px;
+            background-color: #555;
+            margin: 20px 0;
+        }
+
+        .sidebar.open .related-links {
+            display: block; /* サイドバーが開いた時に表示 */
+        }
+    </style>
+</head>
+<body>
+ 
+
+    <!-- オーバーレイ -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- メインコンテンツ -->
+    <div class="content" id="content">
+        <h1 class="title">私のお気に入りの作品</h1>
+
+        <div class="projects">
+            <!-- Ball -->
+            <div class="project">
+                <p class="title">Ball</p>
+                <p class="description">by shutanman</p>
+                <a href="https://scratch.mit.edu/projects/1090888188/" target="_blank">
+                    <img src="https://uploads.scratch.mit.edu/get_image/project/1090888188_600x450.png" alt="Ball by shutanman">
+                </a>
+            </div>
+
+            <!-- Building Up 8-Bit Tiles -->
+            <div class="project">
+                <p class="title">Building Up 8-Bit Tiles</p>
+                <p class="description">by FinitePlane</p>
+                <a href="https://scratch.mit.edu/projects/1074998635/" target="_blank">
+                    <img src="https://uploads.scratch.mit.edu/get_image/project/1074998635_600x450.png" alt="Building Up 8-Bit Tiles by FinitePlane">
+                </a>
+            </div>
+
+            <!-- すべての私のお気に入りの作品リンク -->
+            <p class="title">
+                <a href="https://scratch.mit.edu/users/oira-edu/favorites/" target="_blank" style="color: #007bff; text-decoration: none;">
+                    すべての私のお気に入りの作品はこちら
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

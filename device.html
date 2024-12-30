@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デバイス特定ツール</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            color: #333;
+            text-align: center;
+        }
+        .device-info {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 300px;
+            resize: both;
+            overflow: auto;
+        }
+        #device-details {
+            resize: both;
+            overflow: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            min-height: 50px;
+            max-height: 300px;
+            max-width: 100%;
+        }
+        button {
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background: #0078d7;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #005ea6;
+        }
+
+        /* サイドバー関連のスタイル */
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            padding: 15px;
+            position: fixed;
+            height: 100%;
+            top: 0;
+            left: -250px; /* 最初に隠す */
+            transition: left 0.3s ease;
+            z-index: 10;
+        }
+
+        .sidebar.open {
+            left: 0; /* 開いた時に左から表示 */
+        }
+
+        .sidebar button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 関連リンクボタン */
+        .sidebar-toggle-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 8px;
+            position: fixed;
+            top: 20px;
+            left: 20px; /* 左側に移動 */
+            z-index: 20;
+        }
+
+        /* 関連リンク */
+        .related-links {
+            margin-top: 60px;
+            display: none; /* 初期状態で非表示 */
+        }
+
+        /* 関連リンクの分かれ目 */
+        .divider {
+            height: 1px;
+            background-color: #555;
+            margin: 20px 0;
+        }
+
+        .sidebar.open .related-links {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-info">
+        <h1>デバイス情報</h1>
+        <div id="device-details">ここにデバイス情報が表示されます。</div>
+        <button onclick="getDeviceInfo()">デバイス情報を取得</button>
+    </div>
+
+
+    <script>
+        function getDeviceInfo() {
+            const userAgent = navigator.userAgent;
+            const platform = navigator.platform;
+            const language = navigator.language;
+
+            const details = `
+                ユーザーエージェント: ${userAgent}<br>
+                プラットフォーム: ${platform}<br>
+                言語: ${language}
+            `;
+
+            document.getElementById('device-details').innerHTML = details;
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
