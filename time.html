@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世界のタイムゾーン</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2e2e2e; /* ダーク背景色 */
+            color: #f4f4f9; /* 明るい文字色 */
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #f4f4f9; /* 明るい文字色 */
+            margin-bottom: 30px;
+        }
+        .timezone-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .timezone {
+            background: #3a3a3a; /* 背景色をダークに */
+            border: 1px solid #555; /* ボーダーを少し明るく */
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .timezone:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* ホバー時の影を強調 */
+        }
+        .timezone h2 {
+            font-size: 18px;
+            margin: 0;
+            color: #f4f4f9; /* 明るい文字色 */
+        }
+        .timezone .location {
+            font-size: 16px;
+            color: #bbb; /* 少し明るい灰色 */
+            margin-top: 5px;
+        }
+        .timezone .country {
+            font-size: 14px;
+            color: #999; /* 少し暗い灰色 */
+            margin-top: 3px;
+        }
+        .timezone .clock {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00b4d8; /* 明るい青色 */
+            margin-top: 15px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .clock.changed {
+            color: #ff5c8d; /* 時間変更時に赤色 */
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>世界のタイムゾーン</h1>
+    <div class="timezone-container" id="timezoneContainer"></div>
+
+    <script>
+        // タイムゾーンリスト（日本語地名と国名を含む）
+        const timezones = [
+            { name: "UTC-12:00", offset: -12, location: "ベーカー島", country: "アメリカ合衆国" },
+            { name: "UTC-11:00", offset: -11, location: "パゴパゴ", country: "アメリカ領サモア" },
+            { name: "UTC-10:00", offset: -10, location: "ホノルル", country: "アメリカ合衆国" },
+            { name: "UTC-9:30", offset: -9.5, location: "マルキーズ諸島", country: "フランス" },
+            { name: "UTC-9:00", offset: -9, location: "アンカレッジ", country: "アメリカ合衆国" },
+            { name: "UTC-8:00", offset: -8, location: "ロサンゼルス", country: "アメリカ合衆国" },
+            { name: "UTC-7:00", offset: -7, location: "デンバー", country: "アメリカ合衆国" },
+            { name: "UTC-6:00", offset: -6, location: "メキシコシティ", country: "メキシコ" },
+            { name: "UTC-5:00", offset: -5, location: "ハイチ", country: "ハイチ" },
+            { name: "UTC-4:00", offset: -4, location: "カラカス", country: "ベネズエラ" },
+            { name: "UTC-3:30", offset: -3.5, location: "ニューファンドランド", country: "カナダ" },
+            { name: "UTC-3:00", offset: -3, location: "ブエノスアイレス", country: "アルゼンチン" },
+            { name: "UTC-2:00", offset: -2, location: "サウスジョージア島", country: "イギリス" },
+            { name: "UTC-1:00", offset: -1, location: "アゾレス諸島", country: "ポルトガル" },
+            { name: "UTC±0:00", offset: 0, location: "ロンドン", country: "イギリス" },
+            { name: "UTC+1:00", offset: 1, location: "ベルリン", country: "ドイツ" },
+            { name: "UTC+2:00", offset: 2, location: "カイロ", country: "エジプト" },
+            { name: "UTC+3:00", offset: 3, location: "モスクワ", country: "ロシア" },
+            { name: "UTC+3:30", offset: 3.5, location: "テヘラン", country: "イラン" },
+            { name: "UTC+4:00", offset: 4, location: "ドバイ", country: "アラブ首長国連邦" },
+            { name: "UTC+4:30", offset: 4.5, location: "カブール", country: "アフガニスタン" },
+            { name: "UTC+5:00", offset: 5, location: "イスラマバード", country: "パキスタン" },
+            { name: "UTC+5:30", offset: 5.5, location: "ムンバイ", country: "インド" },
+            { name: "UTC+5:45", offset: 5.75, location: "カトマンズ", country: "ネパール" },
+            { name: "UTC+6:00", offset: 6, location: "アルマトイ", country: "カザフスタン" },
+            { name: "UTC+6:30", offset: 6.5, location: "ヤンゴン", country: "ミャンマー" },
+            { name: "UTC+7:00", offset: 7, location: "バンコク", country: "タイ" },
+            { name: "UTC+8:00", offset: 8, location: "北京", country: "中国" },
+            { name: "UTC+8:45", offset: 8.75, location: "パース", country: "オーストラリア" },
+            { name: "UTC+9:00", offset: 9, location: "東京", country: "日本" },
+            { name: "UTC+9:30", offset: 9.5, location: "アデレード", country: "オーストラリア" },
+            { name: "UTC+10:00", offset: 10, location: "シドニー", country: "オーストラリア" },
+            { name: "UTC+10:30", offset: 10.5, location: "ロードハウ島", country: "オーストラリア" },
+            { name: "UTC+11:00", offset: 11, location: "ソロモン諸島", country: "ソロモン諸島" },
+            { name: "UTC+11:30", offset: 11.5, location: "ノーフォーク島", country: "オーストラリア" },
+            { name: "UTC+12:00", offset: 12, location: "オークランド", country: "ニュージーランド" },
+            { name: "UTC+12:45", offset: 12.75, location: "チャタム諸島", country: "ニュージーランド" }
+        ];
+
+        function createTimeZoneClocks() {
+            const container = document.getElementById("timezoneContainer");
+
+            timezones.forEach(tz => {
+                const timezoneDiv = document.createElement("div");
+                timezoneDiv.className = "timezone";
+                timezoneDiv.innerHTML = `
+                    <h2>${tz.name}</h2>
+                    <div class="location">${tz.location}</div>
+                    <div class="country">${tz.country}</div>
+                    <div class="clock" id="clock-${tz.offset}">--:--:--.---</div>
+                `;
+                container.appendChild(timezoneDiv);
+            });
+        }
+
+        function updateClocks() {
+            const now = new Date();
+            timezones.forEach(tz => {
+                const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+                const localTime = new Date(utc + tz.offset * 3600000);
+                const hours = String(localTime.getHours()).padStart(2, '0');
+                const minutes = String(localTime.getMinutes()).padStart(2, '0');
+                const seconds = String(localTime.getSeconds()).padStart(2, '0');
+                const milliseconds = String(localTime.getMilliseconds()).padStart(3, '0');
+                const timeString = `${hours}:${minutes}:${seconds}.${milliseconds}`;
+                const clockElement = document.getElementById(`clock-${tz.offset}`);
+
+                // 時間が変わったときのみアニメーションを適用
+                if (clockElement.textContent !== timeString) {
+                    clockElement.textContent = timeString;
+                    clockElement.classList.add("changed");
+                    setTimeout(() => clockElement.classList.remove("changed"), 300);
+                }
+            });
+        }
+
+        createTimeZoneClocks();
+        setInterval(updateClocks, 50); // 更新頻度を50msに設定
+    </script>
+</body>
+</html>
