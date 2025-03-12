@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日付を小数形式で表示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: left;
+            margin: 50px;
+        }
+        #piDisplay, #dateDisplay {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+    <div id="piDisplay">3.14159265</div>
+    <div id="dateDisplay"></div>
+    <script>
+        function getDecimalDate() {
+            let now = new Date();
+            let month = now.getMonth() + 1; // 月 (1-12)
+            let day = now.getDate(); // 日 (1-31)
+            let hours = now.getHours(); // 時 (0-23)
+            let minutes = now.getMinutes(); // 分 (0-59)
+            let seconds = now.getSeconds(); // 秒 (0-59)
+            
+            // 小数点以下の部分を修正
+            let decimalPart = (day / 100) + (hours / 10000) + (minutes / 1000000) + (seconds / 100000000);
+            let decimalDate = month + decimalPart;
+            
+            return decimalDate.toFixed(8); // 小数点以下8桁に丸める
+        }
+        
+        function updateDateDisplay() {
+            document.getElementById("dateDisplay").textContent = getDecimalDate();
+        }
+        
+        setInterval(updateDateDisplay, 1000); // 1秒ごとに更新
+        updateDateDisplay(); // 初回実行
+    </script>
+</body>
+</html>
