@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            margin: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        /* 入力フォーム */
+        #youtubeUrl {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background-color: #ff0000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #cc0000;
+        }
+
+        /* 動画表示エリア */
+        #videoContainer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        iframe {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* コメントエリア */
+        #comments {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .comment {
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .comment strong {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <h2>YouTube Video Player</h2>
+    
+    <!-- URL入力フォーム -->
+    <input type="text" id="youtubeUrl" placeholder="YouTubeのURLを入力">
+    <button onclick="loadVideo()">動画を表示</button>
+
+    <!-- YouTube動画の埋め込み -->
+    <div id="videoContainer">
+        <iframe id="youtubePlayer" width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <!-- コメント表示エリア -->
+    <h2>コメント一覧</h2>
+    <div id="comments"></div>
+
+    <script>
+        const apiKey = "YOUR_YOUTUBE_API_KEY"; // ここにYouTube APIキーを入力
+
+        function loadVideo() {
+            const url = document.getElementById("youtubeUrl").value;
+            const videoId = extractVideoID(url);
+            if (videoId) {
+                document.getElementById("youtubePlayer").src = `https://www.youtube.com/embed/${videoId}`;
+                loadComments(videoId);
+            } else {
+                alert("正しいYouTubeのURLを入力してください。");
+            }
+        }
+
+        function extractVideoID(url) {
+            const match = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+            return match ? match[1] : null;
+        }
+
+        function loadComments(videoId) {
+            fetch(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&key=${apiKey}&maxResults=5`)
+            .then(response => response.json())
+            .then(data => {
+                const commentsDiv = document.getElementById("comments");
+                commentsDiv.innerHTML = ""; // 以前のコメントをクリア
+
+                if (data.items) {
+                    data.items.forEach(item => {
+                        const comment = item.snippet.topLevelComment.snippet;
+                        const commentElement = document.createElement("div");
+                        commentElement.classList.add("comment");
+                        commentElement.innerHTML = `<strong>${comment.authorDisplayName}:</strong> ${comment.textDisplay}`;
+                        commentsDiv.appendChild(commentElement);
+                    });
+                } else {
+                    commentsDiv.innerHTML = "<p>コメントが取得できませんでした。</p>";
+                }
+            })
+            .catch(error => {
+                console.error("コメントの取得に失敗:", error);
+                document.getElementById("comments").innerHTML = "<p>コメントの取得に失敗しました。</p>";
+            });
+        }
+    </script>
+</body>
+</html>
